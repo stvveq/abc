@@ -270,12 +270,12 @@ bool readDataFromFile(const char* filename, marafon* runners, int& n) {
         std::cerr << "Ошибка открытия файла: " << filename << std::endl;
         return false;
     }
-
+   
     n = 0;
     while (file >> runners[n].number >> runners[n].name >> runners[n].club
         >> runners[n].start_time.hours >> runners[n].start_time.minutes >> runners[n].start_time.seconds
         >> runners[n].finish_time.hours >> runners[n].finish_time.minutes >> runners[n].finish_time.seconds) {
-        n++;
+        n++;   
     }
 
     
@@ -294,19 +294,22 @@ int main() {
     cout << "Author: BBEBEBEBEBEBE\n";
     cout << "Group: QWEQEWQEQWEQEQWE\n";
     marafon runners[MAX_FILE_ROWS_COUNT];
-    readDataFromFile("data.txt",runners, size);
+    //if (!readDataFromFile("data.txt", runners, size)) {
+      //  return 1; // Ошибка чтения файла
+    //}
+
     const char* filename = "data.txt";
     
-    //try { //чтение файла 
-      //  read("data.txt", runners, size);
-        //for (int i = 0; i < size; i++) {
-          //  print_stuff(runners, i);
-            //cout << endl;
-        //}
-    //}
-    //catch (const char* error) {
-      //  cout << error << '\n';
-    //}
+    try { //чтение файла 
+        read("data.txt", runners, size);
+        for (int i = 0; i < size; i++) {
+            print_stuff(runners, i);
+            cout << endl;
+        }
+    }
+    catch (const char* error) {
+        cout << error << '\n';
+    }
     //string filename = "data.txt";
 
     bool rpts = true;

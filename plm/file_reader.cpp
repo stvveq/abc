@@ -80,15 +80,15 @@ times convert_time(char* str) {
 }
 
 
-void read(const char* file_name, marafon* array[], int& size)
+void read(const char* file_name, marafon* runners, int& size)
 {
 
     std::ifstream file(file_name);
     if (file.is_open())
     {
-        size = 0;
+       
         char tmp_buffer[MAX_STRING_SIZE];
-        while (!file.eof())  //считывает содержимое файла до тех пор, пока не будет достигнут конец 
+       for (int i=0; i<size ; i++)   //считывает содержимое файла до тех пор, пока не будет достигнут конец 
         {
             marafon* item = new marafon;  //динамически выделяем память
             file >> item->number;            
@@ -98,7 +98,6 @@ void read(const char* file_name, marafon* array[], int& size)
             item->start_time = convert_time(tmp_buffer);
             file >> tmp_buffer;
             item->finish_time = convert_time(tmp_buffer);
-            array[size++] = item;
         }
         file.close();
     } //считываем данные из файла ,присваем результат  convert_date и добавляем указатель на объект в массив
