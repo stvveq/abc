@@ -22,9 +22,26 @@ void print_stuff(marafon* runners,int i)
         cout << endl;
    
 }
+
 int getRaceTime(const marafon& runner) {
     return (runner.finish_time.hours * 3600 + runner.finish_time.minutes * 60 + runner.finish_time.seconds) -
         (runner.start_time.hours * 3600 + runner.start_time.minutes * 60 + runner.start_time.seconds);
+}
+times int_to_times(int x) {
+    times result;
+    if (x >= 3600) {
+        result.hours = (x - (x % 3600)) / 3600;
+        x = x - 3600 * result.hours;
+    }
+    if (x >= 60) {
+        result.minutes = (x - (x % 60)) / 60;
+        x = x - 60 * result.minutes;
+    }
+    if (x <= 60) {
+        result.seconds = x;
+            x = x - x;
+    }
+    return result;
 }
 bool compareRaceTime(const marafon& a, const marafon& b) {
     return getRaceTime(a) > getRaceTime(b);
@@ -68,15 +85,18 @@ void bubbleSort(marafon* runners, int n, int criterion) {
     }
 }
 
-int best_time(marafon* runners, int size) {
+times best_time(marafon* runners, int size) {
     int min = getRaceTime(runners[0]);
+    int ind = 0;
     for (int i = 1; i < size; i++) {
         if (min > getRaceTime(runners[i])) {
             min = getRaceTime(runners[i]);
+            ind = i;
         }
 
     }
-    return min;
+    cout << min << endl;
+    return int_to_times(getRaceTime(runners[ind]));
 }
 int partition(marafon* runners, int left, int right, int criterion) {
     marafon pivot = runners[right];
@@ -370,7 +390,8 @@ int main() {
         }
         case 6:
         {
-            cout <<best_time(runners, size)<<endl;
+            times best=best_time(runners,size);
+            cout << best.hours <<":" << best.minutes<< ":" << best.seconds << endl;
         }
         }
     }
