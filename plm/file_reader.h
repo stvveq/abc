@@ -5,6 +5,6 @@
 #include "const.h"
 #include "tele_cons.h"
 
-void read(const char* file_name, marafon* array[], int& size);
+void read(const char* file_name, marafon* runners[], int& size);
 
 #endif

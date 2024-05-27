@@ -59,8 +59,8 @@ void bubbleSort(marafon* runners, int n, int criterion) {
             }
         }
 
-        // Вывод данных после каждого прохода цикла сортировки
-        cout << "Данные после прохода Bubble sort:" << std::endl;
+       
+        cout << "Данные после прохода Bubble sort:" << endl;
         print_stuff(runners, n);
     } while (swapped);
 }
@@ -324,10 +324,9 @@ int main() {
         {
         case 1:
         {
+            
             only_spartak(runners, size);
-            for (int i = 0; i < size; i++) {
-                print_stuff(runners, size);
-            }
+           
             break;
         }
         case 2:
@@ -345,10 +344,7 @@ int main() {
                 << "2.Po vozrast nazv club'a" << endl;
             cin >> sort_id;
             bubbleSort(runners, size, sort_id);
-            for (int i = 0; i < size; i++)
-            {
-                print_stuff(runners, i);
-            }
+            
             break;
         }
         case 4:

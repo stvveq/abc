@@ -1,2 +1,7 @@
-﻿  main.cpp
+﻿  file_reader.cpp
+E:\git\abc\plm\file_reader.cpp(57,13): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+  main.cpp
+  processing.cpp
+E:\git\abc\plm\processing.cpp(17,16): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+  Создание кода...
   plm.vcxproj -> E:\git\abc\x64\Debug\plm.exe
