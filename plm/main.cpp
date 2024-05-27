@@ -7,59 +7,149 @@
 #include "processing.h"
 #include <string>
 using namespace std;
-
-
-void print_stuff(marafon* call[], int id)
+void print_stuff(marafon* runners, int n)
 {
-    cout << call[id]->number << ' ';
-    cout << call[id]->name << ' ';
-    cout << call[id]->club << ' ';
-    cout << call[id]->start_time.hours << ':';
-    cout << call[id]->start_time.minutes << ':';
-    cout << call[id]->start_time.seconds << ' ';
-    cout << call[id]->finish_time.hours << ':';
-    cout << call[id]->finish_time.minutes << ':';
-    cout << call[id]->finish_time.seconds << ' ';
-    cout << endl;
+    for (int i = 0; i < n; i++) {
+
+
+        cout << runners[i].number << ' ';
+        cout << runners[i].name << ' ';
+        cout << runners[i].club << ' ';
+        cout << runners[i].start_time.hours << ':';
+        cout << runners[i].start_time.minutes << ':';
+        cout << runners[i].start_time.seconds << ' ';
+        cout << runners[i].finish_time.hours << ':';
+        cout << runners[i].finish_time.minutes << ':';
+        cout << runners[i].finish_time.seconds << ' ';
+        cout << endl;
+    }
+}
+int getRaceTime(const marafon& runner) {
+    return (runner.finish_time.hours * 3600 + runner.finish_time.minutes * 60 + runner.finish_time.seconds) -
+        (runner.start_time.hours * 3600 + runner.start_time.minutes * 60 + runner.start_time.seconds);
+}
+bool compareRaceTime(const marafon& a, const marafon& b) {
+    return getRaceTime(a) < getRaceTime(b);
+}
+bool compareClubAndName(const marafon& a, const marafon& b) {
+    int clubComparison = strcmp(a.club, b.club);
+    if (clubComparison == 0) {
+        return strcmp(a.name, b.name) < 0;
+    }
+    return clubComparison < 0;
+}
+void bubbleSort(marafon* runners, int n, int criterion) {
+    bool swapped;
+    do {
+        swapped = false;
+        for (int i = 0; i < n - 1; i++) {
+            switch (criterion) {
+            case 1:
+                if (compareRaceTime(runners[i], runners[i + 1])) {
+                    swap(runners[i], runners[i + 1]);
+                    swapped = true;
+                }
+                break;
+            case 2:
+                if (compareClubAndName(runners[i], runners[i + 1])) {
+                    swap(runners[i], runners[i + 1]);
+                    swapped = true;
+                }
+                break;
+            }
+        }
+
+        // Вывод данных после каждого прохода цикла сортировки
+        cout << "Данные после прохода Bubble sort:" << std::endl;
+        print_stuff(runners, n);
+    } while (swapped);
+}
+
+void best_time(marafon* runners, int size) {
+    for (int i = 0; i < size - 1; i++) {
+        for (int j = 1; j < size; j++) {
+            if (getRaceTime(runners[i]), getRaceTime(runners[j])) {
+                swap(runners[i], runners[j]);
+
+            }
+        }
+        cout << getRaceTime(runners[i]) << endl;
+
+    }
+}
+int partition(marafon* runners, int left, int right, int criterion) {
+    marafon pivot = runners[right];
+    int i = left - 1;
+
+    for (int j = left; j < right; j++) {
+        switch (criterion) {
+        case 1:
+            if (compareRaceTime(runners[j], pivot)) {
+                i++;
+                swap(runners[i], runners[j]);
+            }
+            break;
+        case 2:
+            if (compareClubAndName(runners[j], pivot)) {
+                i++;
+                swap(runners[i], runners[j]);
+            }
+            break;
+        }
+    }
+    swap(runners[i + 1], runners[right]);
+    return i + 1;
+}
+void quickSort(marafon* runners, int left, int right, int criterion) {
+    if (left < right) {
+        int pivot = partition(runners, left, right, criterion);
+        quickSort(runners, left, pivot - 1, criterion);
+        quickSort(runners, pivot + 1, right, criterion);
+    }
+
+    
+    cout << "Данные после Quick sort:" << endl;
+    print_stuff(runners, right + 1); // Выводим с учетом pivot
 }
 
 
 
-void only_spartak(marafon* subscriptions[], int size)//тока спартак
+
+void only_spartak(marafon* runners, int size)
 {
 
 
     for (int i = 0; i < size; i++)
     {
-        if (strstr(subscriptions[i]->club, "Spartak") != NULL)
+        if (strstr(runners[i].club, "Spartak") != NULL)
         {
-            print_stuff(subscriptions, i);
+            print_stuff(runners, i);
             
         }
     }
 }
-void only_min_time(marafon* subscriptions[], int size)//<2 50 00
+void only_min_time(marafon* runners, int size)//<2 50 00
 {
 
 
     for (int i = 0; i < size; i++)
     {
-        if (((subscriptions[i]->finish_time.hours) * 3600 + (subscriptions[i]->finish_time.minutes) * 60 + (subscriptions[i]->finish_time.seconds) - (subscriptions[i]->start_time.hours) * 3600 + (subscriptions[i]->start_time.minutes) * 60 + (subscriptions[i]->start_time.seconds)) < 10200)
+        if (getRaceTime(runners[i])< 10200)
 
         {
-            print_stuff(subscriptions, i);
+            print_stuff(runners, i);
         }
     }
 }
 
 
-bool SortCase(int sort_id, marafon* subscriptions[], int size, int id, int id2)
+/*bool SortCase(int sort_id, marafon* subscriptions[], int size, int id, int id2)
 {
     switch (sort_id)
     {
     case 1:
     {
-        if ((subscriptions[id]->finish_time.hours) * 3600 + (subscriptions[id]->finish_time.minutes) * 60 + (subscriptions[id]->finish_time.seconds) - (subscriptions[id]->start_time.hours) * 3600 + (subscriptions[id]->start_time.minutes) * 60 + (subscriptions[id]->start_time.seconds))
+        if ((subscriptions[id]->finish_time.hours) * 3600 + (subscriptions[id]->finish_time.minutes) * 60 + (subscriptions[id]->finish_time.seconds) - (subscriptions[id]->start_time.hours) * 3600 - (subscriptions[id]->start_time.minutes) * 60 - (subscriptions[id]->start_time.seconds))
         {
             return true;
         }
@@ -126,7 +216,7 @@ void heapify(marafon* subscriptions[], int size, int i, int sort_id)
     }
 }
 
-/*void heapSort(marafon* subscriptions[], int size, int sort_id)
+void heapSort(marafon* subscriptions[], int size, int sort_id)
 {
     for (int i = size / 2 - 1; i >= 0; i--) {
         heapify(subscriptions, size, i, sort_id);
@@ -138,7 +228,7 @@ void heapify(marafon* subscriptions[], int size, int i, int sort_id)
         heapify(subscriptions, i, 0, sort_id);
     }
 }
-*/
+
 int partition(marafon* arr[], int low, int high, int sort_id, int size) {
     marafon* pivot = arr[high];
     int i = low;
@@ -173,29 +263,51 @@ void BubbleSort(marafon* subscriptions[], int size, int sort_id) {
     {
         print_stuff(subscriptions, d); // Вывод данных после сортировки
     }
-}
+}*/
+bool readDataFromFile(const char* filename, marafon* runners, int& n) {
+    ifstream file(filename);
+    if (!file.is_open()) {
+        std::cerr << "Ошибка открытия файла: " << filename << std::endl;
+        return false;
+    }
 
+    n = 0;
+    while (file >> runners[n].number >> runners[n].name >> runners[n].club
+        >> runners[n].start_time.hours >> runners[n].start_time.minutes >> runners[n].start_time.seconds
+        >> runners[n].finish_time.hours >> runners[n].finish_time.minutes >> runners[n].finish_time.seconds) {
+        n++;
+    }
+
+    
+    cout << "Данные из файла:" <<endl;
+    print_stuff(runners, n);
+
+    file.close();
+    return true;
+}
 int main() {
     int sort_id;
+    int size;
     setlocale(LC_ALL, "Russian");
     cout << "Laboratory work #10. GIT\n";
     cout << "Variant #1.marafon\n";
     cout << "Author: BBEBEBEBEBEBE\n";
     cout << "Group: QWEQEWQEQWEQEQWE\n";
-    marafon* call[MAX_FILE_ROWS_COUNT];
-
-    int size;
-    try { //чтение файла 
-        read("data.txt", call, size);
-        for (int i = 0; i < size; i++) {
-            print_stuff(call, i);
-            cout << endl;
-        }
-    }
-    catch (const char* error) {
-        cout << error << '\n';
-    }
-    string filename = "data.txt";
+    marafon runners[MAX_FILE_ROWS_COUNT];
+    readDataFromFile("data.txt",runners, size);
+    const char* filename = "data.txt";
+    
+    //try { //чтение файла 
+      //  read("data.txt", runners, size);
+        //for (int i = 0; i < size; i++) {
+          //  print_stuff(runners, i);
+            //cout << endl;
+        //}
+    //}
+    //catch (const char* error) {
+      //  cout << error << '\n';
+    //}
+    //string filename = "data.txt";
 
     bool rpts = true;
     int rpts_value = 0;
@@ -206,19 +318,21 @@ int main() {
             << "3. Bubble" << endl
             << "4. Quick" << endl
             << "5. Exit " << endl
-            << "6.Средняя стоимость одной секунды разговора" << endl;
+            << "6.Best time" << endl;
         cin >> rpts_value;
         switch (rpts_value)
         {
         case 1:
         {
-            only_spartak(call, size);
-            
+            only_spartak(runners, size);
+            for (int i = 0; i < size; i++) {
+                print_stuff(runners, size);
+            }
             break;
         }
         case 2:
         {
-            only_min_time(call, size);
+            only_min_time(runners, size);
 
             break;
         }
@@ -230,10 +344,10 @@ int main() {
                 << "1.Po vozrast dlit" << endl
                 << "2.Po vozrast nazv club'a" << endl;
             cin >> sort_id;
-            BubbleSort(call, size, sort_id);
+            bubbleSort(runners, size, sort_id);
             for (int i = 0; i < size; i++)
             {
-                print_stuff(call, i);
+                print_stuff(runners, i);
             }
             break;
         }
@@ -244,10 +358,10 @@ int main() {
                 << "1.Po vozrast dlit" << endl
                 << "2.Po vozrast nazv club'a" << endl;
             cin >> sort_id;
-            quickSort(call, 0, size - 1, sort_id, size);
+            quickSort(runners, 0, size - 1, sort_id);
             for (int i = 0; i < size; i++)
             {
-                print_stuff(call, i);
+                print_stuff(runners, i);
             }
             break;
         }
@@ -258,12 +372,10 @@ int main() {
         }
         case 6:
         {
-           
+            best_time(runners, size);
         }
         }
     }
-    for (int i = 0; i < size; i++) {
-        delete call[i];
-    }
+
     return 0;
 }
