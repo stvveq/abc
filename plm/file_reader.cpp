@@ -6,6 +6,7 @@
 #include <string>
 #include <sstream>
 #include <cstdlib>
+#include <iostream>
 using namespace std;
 
 
@@ -82,23 +83,25 @@ times convert_time(char* str) {
 
 void read(const char* file_name, marafon* runners, int& size)
 {
-
-    std::ifstream file(file_name);
+     
+    size = 0;
+    ifstream file(file_name);
     if (file.is_open())
     {
-       
+        
         char tmp_buffer[MAX_STRING_SIZE];
-       for (int i=0; i<size ; i++)   //считывает содержимое файла до тех пор, пока не будет достигнут конец 
-        {
-            marafon* item = new marafon;  //динамически выделяем память
-            file >> item->number;            
-            file >> item->name;
-            file >> item->club;
+       while (!file.eof())   //считывает содержимое файла до тех пор, пока не будет достигнут конец 
+       {
+            file >> runners[size].number;             
+            file >> runners[size].name;            
+            file >> runners[size].club;          
             file >> tmp_buffer;
-            item->start_time = convert_time(tmp_buffer);
+            runners[size].start_time = convert_time(tmp_buffer);            
             file >> tmp_buffer;
-            item->finish_time = convert_time(tmp_buffer);
-        }
+            runners[size].finish_time = convert_time(tmp_buffer);           
+            size++;           
+       }
+        
         file.close();
     } //считываем данные из файла ,присваем результат  convert_date и добавляем указатель на объект в массив
 
@@ -106,5 +109,6 @@ void read(const char* file_name, marafon* runners, int& size)
     {
         throw "Ошибка открытия файла";
     }
+    
 }
 

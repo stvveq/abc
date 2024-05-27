@@ -1,5 +1,2 @@
 ﻿  main.cpp
-  processing.cpp
-E:\git\abc\plm\processing.cpp(17,16): warning C4244: =: преобразование "int" в "float", возможна потеря данных
-  Создание кода...
   plm.vcxproj -> E:\git\abc\x64\Debug\plm.exe

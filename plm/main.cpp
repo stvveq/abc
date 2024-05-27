@@ -7,11 +7,9 @@
 #include "processing.h"
 #include <string>
 using namespace std;
-void print_stuff(marafon* runners, int n)
+void print_stuff(marafon* runners,int i)
 {
-    for (int i = 0; i < n; i++) {
-
-
+   
         cout << runners[i].number << ' ';
         cout << runners[i].name << ' ';
         cout << runners[i].club << ' ';
@@ -22,14 +20,14 @@ void print_stuff(marafon* runners, int n)
         cout << runners[i].finish_time.minutes << ':';
         cout << runners[i].finish_time.seconds << ' ';
         cout << endl;
-    }
+   
 }
 int getRaceTime(const marafon& runner) {
     return (runner.finish_time.hours * 3600 + runner.finish_time.minutes * 60 + runner.finish_time.seconds) -
         (runner.start_time.hours * 3600 + runner.start_time.minutes * 60 + runner.start_time.seconds);
 }
 bool compareRaceTime(const marafon& a, const marafon& b) {
-    return getRaceTime(a) < getRaceTime(b);
+    return getRaceTime(a) > getRaceTime(b);
 }
 bool compareClubAndName(const marafon& a, const marafon& b) {
     int clubComparison = strcmp(a.club, b.club);
@@ -60,22 +58,25 @@ void bubbleSort(marafon* runners, int n, int criterion) {
         }
 
        
-        cout << "Данные после прохода Bubble sort:" << endl;
-        print_stuff(runners, n);
+       
+        
+     
     } while (swapped);
+    
+    for (int i = 0; i < n; i++) {
+        print_stuff(runners, i);
+    }
 }
 
-void best_time(marafon* runners, int size) {
-    for (int i = 0; i < size - 1; i++) {
-        for (int j = 1; j < size; j++) {
-            if (getRaceTime(runners[i]), getRaceTime(runners[j])) {
-                swap(runners[i], runners[j]);
-
-            }
+int best_time(marafon* runners, int size) {
+    int min = getRaceTime(runners[0]);
+    for (int i = 1; i < size; i++) {
+        if (min > getRaceTime(runners[i])) {
+            min = getRaceTime(runners[i]);
         }
-        cout << getRaceTime(runners[i]) << endl;
 
     }
+    return min;
 }
 int partition(marafon* runners, int left, int right, int criterion) {
     marafon pivot = runners[right];
@@ -101,15 +102,14 @@ int partition(marafon* runners, int left, int right, int criterion) {
     return i + 1;
 }
 void quickSort(marafon* runners, int left, int right, int criterion) {
-    if (left < right) {
+    if (left > right) {
         int pivot = partition(runners, left, right, criterion);
         quickSort(runners, left, pivot - 1, criterion);
         quickSort(runners, pivot + 1, right, criterion);
     }
 
     
-    cout << "Данные после Quick sort:" << endl;
-    print_stuff(runners, right + 1); // Выводим с учетом pivot
+
 }
 
 
@@ -304,7 +304,6 @@ int main() {
         read("data.txt", runners, size);
         for (int i = 0; i < size; i++) {
             print_stuff(runners, i);
-            cout << endl;
         }
     }
     catch (const char* error) {
@@ -358,10 +357,10 @@ int main() {
                 << "2.Po vozrast nazv club'a" << endl;
             cin >> sort_id;
             quickSort(runners, 0, size - 1, sort_id);
-            for (int i = 0; i < size; i++)
-            {
+            for (int i = 0; i < size; i++) {
                 print_stuff(runners, i);
             }
+           
             break;
         }
         case 5:
@@ -371,7 +370,7 @@ int main() {
         }
         case 6:
         {
-            best_time(runners, size);
+            cout <<best_time(runners, size)<<endl;
         }
         }
     }
